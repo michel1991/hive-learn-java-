@@ -1,0 +1,24 @@
+--> mandalore-express-annotations (pourrait être dans app)
+   application
+     lib
+        mandalore-express-annotations
+        mandalore-express-money
+           -- pas pris le contenu de test resources META-INF
+           -- Manque de test à faire
+               --> faudrait l'installation de la librairie
+           --- regarder la librairie ajouter au class path
+
+
+
+
+--> auto completion (touche controle+ option + space)
+
+package org.manmvou.mandaloreexpress.money.domain;
+
+import junit.framework.TestCase;
+
+public class AmountTest extends TestCase {
+
+    public void testAdd() {
+    }
+}
