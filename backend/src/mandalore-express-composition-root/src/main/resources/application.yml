@@ -1,0 +1,9 @@
+output:
+  ansi.enabled: always
+jackson:
+  default-property-inclusion: non_null
+
+server:
+  port: 1865
+  error:
+    include-message: ALWAYS
