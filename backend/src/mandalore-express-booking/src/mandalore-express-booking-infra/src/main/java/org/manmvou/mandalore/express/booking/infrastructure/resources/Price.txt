@@ -1,0 +1,30 @@
+package com.beyondxscratch.mandaloreexpress.booking.infrastructure.resources;
+
+import com.beyondxscratch.mandaloreexpress.money.domain.Currency;
+import com.beyondxscratch.mandaloreexpress.infrastructure.Resource;
+import java.math.BigDecimal;
+
+@Resource
+public class Price {
+    private BigDecimal amount;
+    private Currency currency;
+
+    public Price(BigDecimal amount, Currency currency) {
+        this.amount = amount;
+        this.currency = currency;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+}
+
+import com.beyondxscratch.mandaloreexpress.booking.domain.spacetrain.fare.Price as DomainPrice;
+
+public static Price toResource(DomainPrice domainPrice) {
+    return new Price(domainPrice.getAmount().getValue(), domainPrice.getCurrency());
+}

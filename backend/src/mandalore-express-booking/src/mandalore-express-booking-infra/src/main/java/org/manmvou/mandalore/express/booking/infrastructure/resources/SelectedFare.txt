@@ -1,0 +1,42 @@
+package com.beyondxscratch.mandaloreexpress.booking.infrastructure.resources;
+
+import com.beyondxscratch.mandaloreexpress.booking.domain.spacetrain.fare.ComfortClass;
+import com.beyondxscratch.mandaloreexpress.infrastructure.Resource;
+import org.springframework.hateoas.RepresentationModel;
+
+import java.util.UUID;
+
+@Resource
+public class SelectedFare extends RepresentationModel<SelectedFare> {
+    private final UUID id;
+    private final ComfortClass comfortClass;
+    private final Price price;
+
+    public SelectedFare(UUID id, ComfortClass comfortClass, Price price) {
+        this.id = id;
+        this.comfortClass = comfortClass;
+        this.price = price;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public ComfortClass getComfortClass() {
+        return comfortClass;
+    }
+
+    public Price getPrice() {
+        return price;
+    }
+}
+
+public class DomainSelectedFare {
+    private UUID id;
+    private ComfortClass comfortClass;
+    private Price price;
+
+    public SelectedFare toResource() {
+        return new SelectedFare(id, comfortClass, price.toResource());
+    }
+}
