@@ -159,6 +159,11 @@
         </dependency>-->
         <dependency>
             <groupId>org.manmvou</groupId>
+            <artifactId>mandalore-express-booking-infra</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.manmvou</groupId>
             <artifactId>mandalore-express-hypermedia</artifactId>
             <version>${project.version}</version>
         </dependency>

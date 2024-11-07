@@ -26,4 +26,4 @@ public class AmountTest extends TestCase {
 https://spring.io/projects/spring-boot#learn
 https://docs.spring.io/spring-boot/docs/2.7.18/reference/html/
 
-/Users/michelmvoumamvouma/.m2/repository/org/manmvou
+userWorkspace/.m2/repository/org/manmvou
