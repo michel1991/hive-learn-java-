@@ -13,6 +13,8 @@
     <module>src/mandalore-express-money</module>
     <module>src/mandalore-express-annotations</module>
     <module>src/mandalore-express-booking</module>
+      <module>src/mandalore-express-hypermedia</module>
+      <module>src/mandalore-express-composition-root</module>
   </modules>
 
 

@@ -16,7 +16,7 @@ public class InMemoryBookings implements Bookings {
     private final Map<UUID, Booking> bookings = new HashMap<>();
 
     @Override
-    public Booking findBookingById(UUID bookingId) {
+    public Booking findBookingIdentifiedBy(UUID bookingId) {
         return bookings.get(bookingId);
     }
 
