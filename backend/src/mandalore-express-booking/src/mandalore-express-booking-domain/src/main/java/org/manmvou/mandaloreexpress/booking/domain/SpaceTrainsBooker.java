@@ -64,7 +64,7 @@ public class SpaceTrainsBooker implements PrepareBooking, FinalizeBooking {
     }
 
     private Booking retrieveBooking(UUID bookingId) {
-        Booking booking =  bookings.findBookingById(bookingId);
+        Booking booking =  bookings.findBookingIdentifiedBy(bookingId);
         if(booking != null){
             return booking;
         }

@@ -5,6 +5,6 @@ import org.manmvou.mandaloreexpress.booking.domain.Booking;
 import java.util.UUID;
 
 public interface Bookings {
-    Booking findBookingById(UUID bookingId);
+    Booking findBookingIdentifiedBy(UUID bookingId);
     Booking save(Booking booking);
 }
