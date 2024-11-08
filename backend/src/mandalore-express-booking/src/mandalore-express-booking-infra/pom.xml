@@ -5,11 +5,11 @@
         <groupId>org.manmvou</groupId>
         <artifactId>mandalore-express-booking</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <!--<relativePath>../../pom.xml</relativePath>-->
     </parent>
 
     <artifactId>mandalore-express-booking-infra</artifactId>
-    <packaging>jar</packaging>
+    <!--<packaging>jar</packaging>-->
 
     <name>mandalore-express-booking-infra</name>
     <url>http://maven.apache.org</url>
@@ -21,8 +21,36 @@
         <spring-hateoas.version>1.4.0</spring-hateoas.version>
         <evo.version>1.2.2</evo.version>
         <jsonpath.version>2.9.0</jsonpath.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
 
     </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Java Compiler Plugin (Optional, Maven can handle Java compilation by default) -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <source>${maven.compiler.source}</source>
+                        <target>${maven.compiler.target}</target>
+                    </configuration>
+                </plugin>
+
+                <!-- Additional Plugins for Java if needed -->
+                <!-- Example: Spring Boot Plugin if using Spring in Java -->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version> <!-- Ensure this version aligns with your project setup -->
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
 
     <dependencyManagement>
         <dependencies>

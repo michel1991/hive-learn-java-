@@ -5,18 +5,76 @@
         <groupId>org.manmvou</groupId>
         <artifactId>mandalore-express-booking</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <!--<relativePath>../../pom.xml</relativePath>-->
     </parent>
 
     <artifactId>mandalore-express-booking-domain</artifactId>
-    <packaging>jar</packaging>
+    <!-- <packaging>jar</packaging>-->
 
     <name>mandalore-express-booking-domain</name>
     <url>http://maven.apache.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
+
+    <build>
+        <plugins>
+            <!-- Enforcer Plugin to Enforce Dependency Rules -->
+            <plugin>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <!-- pb ici -->
+                                       <!--<exclude>*</exclude>--> <!-- Forbids non-domain dependencies -->
+                                    </excludes>
+                                    <includes>
+                                        <!-- Allowing domain-related dependencies -->
+                                        <include>org.jetbrains:annotations</include>
+                                        <!-- Allowing test dependencies -->
+                                        <include>*:*:*:*:test</include>
+                                        <include>>mandalore-express-annotations</include>
+                                        <include>mandalore-express-money</include>
+                                    </includes>
+                                </bannedDependencies>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- JAR Plugin for Packaging Test Code into a Test JAR -->
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Compiler Plugin for Java (Optional, Maven Compiler Plugin handles Java compilation by default) -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>
