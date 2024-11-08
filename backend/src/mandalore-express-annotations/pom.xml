@@ -5,26 +5,20 @@
         <groupId>org.manmvou</groupId>
         <artifactId>backend</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <!--<relativePath>../../pom.xml</relativePath>-->
     </parent>
 
     <artifactId>mandalore-express-annotations</artifactId>
-    <packaging>jar</packaging>
+    <!--<packaging>jar</packaging>-->
 
     <name>mandalore-express-annotations</name>
     <url>http://maven.apache.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 
     <build>
         <plugins>
@@ -39,7 +33,16 @@
                 </executions>
             </plugin>
         </plugins>
-
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
 
 </project>
