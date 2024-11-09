@@ -8,11 +8,28 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
+// includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = UseCase.class)
+// org.manmvou.mandaloreexpress.booking.domain
 
+/**
+  @Configuration
+     @ComponentScan(
+          basePackages = "com.arhohuttunen.coffeeshop.application",
+          includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = UseCase.class)
+  )
+ */
 @Configuration
 @ComponentScan(
-        basePackageClasses = Booking.class,
-        includeFilters = @Filter(type = FilterType.ANNOTATION, value = {DomainService.class, Stub.class, AntiCorruptionLayer.class})
+        //basePackageClasses = Booking.class,
+        basePackages = {
+                "org.manmvou.mandaloreexpress.booking.domain",
+                "org.manmvou.mandalore.express.booking.infrastructure.clients"
+        },
+        //includeFilters = @Filter(type = FilterType.ANNOTATION, value = {DomainService.class, Stub.class, AntiCorruptionLayer.class})
+        includeFilters = @ComponentScan.Filter(
+                type = FilterType.ANNOTATION,
+                value = {DomainService.class, Stub.class, AntiCorruptionLayer.class}
+        )
 )
 public class BookingDomainConfiguration {
 }

@@ -30,6 +30,119 @@
     <junit-platform.version>1.10.2</junit-platform.version>
   </properties>
 
+  <build>
+    <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+    <!--<sourceDirectory>${project.basedir}/src</sourceDirectory>-->
+    <!--<testSourceDirectory>${project.basedir}/src/test</testSourceDirectory>-->
+    <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
+
+    <plugins>
+      <!-- Enforcer Plugin for Dependency Management -->
+      <plugin>
+        <artifactId>maven-enforcer-plugin</artifactId>
+      </plugin>
+    </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <!--<plugin>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>3.5.0</version>
+          <executions>
+            <execution>
+              <id>dependencies-sanitization</id>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <dependencyConvergence/>
+                  <requireUpperBoundDeps/>
+                  <requirePluginVersions/>
+                </rules>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>-->
+
+        <!-- Dependency Plugin -->
+        <plugin>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>3.7.0</version>
+        </plugin>
+
+        <!-- Surefire Plugin for Unit Testing -->
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.3.0</version>
+          <configuration>
+            <includes>
+              <include>**/*Should</include>
+            </includes>
+            <!--<argLine>
+              -Djunit.jupiter.extensions.autodetection.enabled=true
+              -Djunit.jupiter.displayname.generator.default=com.beyondxscratch.ShouldDisplayNameGenerator
+            </argLine>-->
+          </configuration>
+        </plugin>
+
+        <!-- Compiler Plugin for Java Version -->
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.13.0</version>
+          <configuration>
+            <source>${java.version}</source>
+            <target>${java.version}</target>
+          </configuration>
+        </plugin>
+
+        <!-- Maven Resources Plugin -->
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.3.1</version>
+        </plugin>
+
+        <!-- Jar Plugin -->
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.4.1</version>
+        </plugin>
+
+        <!-- Clean, Install, Site, and Deploy Plugins -->
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.3.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>3.1.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>4.0.0-M15</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>3.1.2</version>
+        </plugin>
+
+        <!-- Failsafe Plugin for Integration Testing -->
+        <plugin>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>3.3.0</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>integration-test</goal>
+                <goal>verify</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
   <dependencies>
     <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
     <dependency>
@@ -46,7 +159,47 @@
       <scope>test</scope>
     </dependency>
 
-
-
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- JUnit Jupiter and Platform Dependencies -->
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>${junit-jupiter.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>${junit-jupiter.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-params</artifactId>
+        <version>${junit-jupiter.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.platform</groupId>
+        <artifactId>junit-platform-engine</artifactId>
+        <version>${junit-platform.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>3.18.1</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 </project>

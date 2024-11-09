@@ -12,17 +12,20 @@ public class BookingHypermediaResolver implements HypermediaResolver {
 
     @Override
     public boolean accept(Relation relation) {
-        return relation instanceof CreateBooking;
+        System.out.println("hello accept");
+        //return relation instanceof CreateBooking;
+        return true;
     }
 
     @Override
     public Link linkFor(Relation relation) {
-        if (relation instanceof CreateBooking) {
+        System.out.println("for link");
+        /*if (relation instanceof CreateBooking) {
             CreateBooking createBooking = (CreateBooking) relation;
             return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(BookingController.class)
                             .bookSomeSpaceTrainsFromTheSelectionOf(createBooking.getSearchId()))
                     .withRel("create-booking");
-        }
+        }*/
         throw new IllegalArgumentException("Unsupported relation type: " + relation.getClass());
     }
 }

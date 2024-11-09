@@ -1,3 +1,8 @@
+spring:
+  web:
+    whitelabel:
+      enabled: true  # Set to false to disable the Whitel
+
 output:
   ansi.enabled: always
 jackson:

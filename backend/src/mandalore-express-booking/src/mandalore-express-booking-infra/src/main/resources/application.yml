@@ -1,5 +1,0 @@
-spring:
-  output:
-    ansi.enabled: always
-  jackson:
-    default-property-inclusion: non_null
