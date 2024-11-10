@@ -249,4 +249,20 @@ public class Search {
                 );*/
         return true;
     }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public Criteria getCriteria() {
+        return criteria;
+    }
+
+    public SpaceTrains getSpaceTrains() {
+        return spaceTrains;
+    }
+
+    public Selection getSelection() {
+        return selection;
+    }
 }
