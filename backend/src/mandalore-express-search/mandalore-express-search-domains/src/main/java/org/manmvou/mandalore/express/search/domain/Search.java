@@ -19,21 +19,25 @@ import org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class Search {
     private final UUID id;
     private final Criteria criteria;
     private final SpaceTrains spaceTrains;
-    private final Selection selection;
+    private Selection selection;
 
-    public Search(Criteria criteria, SpaceTrains spaceTrains, Selection selection) {
+    public Search(Criteria criteria, SpaceTrains spaceTrains) {
         this.id = UUID.randomUUID();
         this.criteria = criteria;
         this.spaceTrains = spaceTrains;
-        this.selection = selection != null ? selection : new Selection();
+        //this.selection = selection != null ? selection : new Selection();
+        this.selection = new Selection();
 
         validate();
+    }
+
+    public void setSelection(Selection selection) {
+        this.selection = selection;
     }
 
     private void validate() {
