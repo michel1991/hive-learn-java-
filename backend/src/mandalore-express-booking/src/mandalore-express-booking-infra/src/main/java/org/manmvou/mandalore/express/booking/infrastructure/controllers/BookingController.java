@@ -32,6 +32,12 @@ public class BookingController {
     private  EntityLinks entityLinks;
     //private static final Logger logger = LoggerFactory.getLogger(BookingController.class);
 
+    public BookingController(PrepareBooking prepareBookins, Bookings bookings, EntityLinks entityLinks) {
+        this.prepareBooking = prepareBookins;
+        this.bookings = bookings;
+        this.entityLinks = entityLinks;
+    }
+
    /*public BookingController(PrepareBooking prepareBooking, Bookings bookings, EntityLinks entityLinks) {
         this.prepareBooking = prepareBooking;
         this.bookings = bookings;
