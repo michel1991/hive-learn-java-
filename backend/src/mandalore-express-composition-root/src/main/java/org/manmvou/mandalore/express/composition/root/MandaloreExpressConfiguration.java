@@ -14,7 +14,8 @@ import org.springframework.context.annotation.FilterType;
 
 @ComponentScan(
         basePackages = {
-                "org.manmvou.mandalore.express.booking.infrastructure.controllers"
+                "org.manmvou.mandalore.express.booking.infrastructure.controllers",
+                "org.manmvou.mandalore.express.search.infrastructure.controllers"
                // "org.manmvou.mandaloreexpress.booking.domain"
         },
         includeFilters = @Filter(

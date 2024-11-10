@@ -2,6 +2,7 @@ package org.manmvou.mandalore.express.booking.infrastructure.clients;
 
 import org.manmvou.mandalore.express.annotations.ddd.AntiCorruptionLayer;
 //import com.beyondxscratch.mandaloreexpress.booking.domain.spacetrain.SpaceTrain as BookingTrain;
+import org.manmvou.mandalore.express.search.domain.api.GetSearch;
 import org.manmvou.mandaloreexpress.booking.domain.spacetrain.SpaceTrain;
 import org.manmvou.mandaloreexpress.booking.domain.spacetrain.fare.ComfortClass;
 import org.manmvou.mandaloreexpress.booking.domain.spacetrain.fare.Price;
@@ -22,6 +23,12 @@ import java.util.stream.Collectors;
 
 @AntiCorruptionLayer
 public class BookingInProcAdapterToSearch implements GetTrainsToBook, IsSelectionComplete{
+    private final GetSearch getSearch;
+
+    public BookingInProcAdapterToSearch(GetSearch getSearch) {
+        this.getSearch = getSearch;
+    }
+
     @Override
     public List<SpaceTrain> from(UUID searchId) {
         return List.of();
