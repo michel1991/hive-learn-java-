@@ -61,10 +61,10 @@ public class FareOption {
     }
 
     // // FareOptions type alias equivalent
-    public static class FareOptionsTypeAlias {
+    public static class FareOptions {
         private final Set<FareOption> options;
 
-        public FareOptionsTypeAlias(Set<FareOption> options) {
+        public FareOptions(Set<FareOption> options) {
             this.options = options;
         }
 
