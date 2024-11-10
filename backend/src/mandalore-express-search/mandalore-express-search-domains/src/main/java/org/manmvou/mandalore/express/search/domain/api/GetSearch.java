@@ -6,7 +6,7 @@ import org.manmvou.mandalore.express.search.domain.spi.Searches;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-interface GetSearch {
+public interface GetSearch {
     Searches getSearches();
 
     default Search identifiedBy(UUID searchId) {
