@@ -1,13 +1,13 @@
 package org.manmvou.mandalore.express.search.domain.criteria;
-
+import org.manmvou.mandalore.express.search.domain.criteria.Journey.Journeys;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class Criteria {
 
-    private final List<Journey> journeys;
+    private final Journey.Journeys journeys;
 
-    public Criteria(List<Journey> journeys) {
+    public Criteria(Journey.Journeys journeys) {
         if (journeys.isEmpty()) {
             throw new IllegalArgumentException("Criteria must contain at least one journey");
         }
@@ -24,11 +24,11 @@ public class Criteria {
         this.journeys = journeys;
     }
 
-    public List<Journey> getJourneys() {
+    public Journey.Journeys getJourneys() {
         return journeys;
     }
 
-    private boolean areConnectedTogether(List<Journey> journeys) {
+    private boolean areConnectedTogether(Journey.Journeys journeys) {
         for (int i = 0; i < journeys.size() - 1; i++) {
             if (!journeys.get(i).isConnectedTo(journeys.get(i + 1))) {
                 return false;
@@ -37,7 +37,7 @@ public class Criteria {
         return true;
     }
 
-    private boolean areOrderedByDepartureSchedule(List<Journey> journeys) {
+    private boolean areOrderedByDepartureSchedule(Journey.Journeys journeys) {
         /*for (int i = 0; i < journeys.size() - 1; i++) {
             if (journeys.get(i).getDepartureSchedule().isAfter(journeys.get(i + 1).getDepartureSchedule())) {
                 return false;
@@ -46,7 +46,7 @@ public class Criteria {
         return true;
     }
 
-    private boolean haveAtLeastADayBetweenEach(List<Journey> journeys) {
+    private boolean haveAtLeastADayBetweenEach(Journey.Journeys journeys) {
         /*for (int i = 0; i < journeys.size() - 1; i++) {
             if (!isAtLeast5DaysAfter(journeys.get(i + 1).getDepartureSchedule(), journeys.get(i).getDepartureSchedule())) {
                 return false;
