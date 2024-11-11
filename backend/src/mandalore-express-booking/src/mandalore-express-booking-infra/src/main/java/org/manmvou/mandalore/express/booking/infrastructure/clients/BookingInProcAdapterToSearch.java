@@ -13,6 +13,7 @@ import org.manmvou.mandaloreexpress.booking.domain.spacetrain.fare.SelectedFare;
 import org.manmvou.mandaloreexpress.booking.domain.spi.IsSelectionComplete;
 import org.manmvou.mandaloreexpress.booking.domain.spi.GetTrainsToBook;
 //import org.manmvou.mandaloreexpress.booking.domain.spacetrain.Schedule
+//import org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain;
 
 /*import com.beyondxscratch.mandaloreexpress.search.domain.Search;
 import com.beyondxscratch.mandaloreexpress.search.domain.api.GetSearch;
@@ -31,11 +32,35 @@ public class BookingInProcAdapterToSearch implements GetTrainsToBook, IsSelectio
     }
 
     @Override
+    public boolean of(UUID searchId) {
+        Search search = getSearch.identifiedBy(searchId);
+        return search.isSelectionComplete();
+    }
+
+
+    @Override
     public List<SpaceTrain> from(UUID searchId) {
         Search search = getSearch.identifiedBy(searchId);
         getSelectionSortedByBound(search);
         //return convertSelectedTrainsFrom(search.getSelectionSortedByBound());
         return new ArrayList<>();
+    }
+
+    // com.beyondxscratch.mandaloreexpress.search.domain.spacetrain.Schedule
+    private org.manmvou.mandaloreexpress.booking.domain.spacetrain.Schedule convertToBookingSchedule(
+            org.manmvou.mandalore.express.search.domain.spacetrain.Schedule schedule
+    ) {
+        return new org.manmvou.mandaloreexpress.booking.domain.spacetrain.Schedule(
+                schedule.getDeparture(), schedule.getArrival()
+        );
+    }
+
+    private SelectedFare convertToBookingFare(FareOption fare) {
+        return new SelectedFare(
+                fare.getId(),
+                ComfortClass.valueOf(fare.getComfortClass().name()),
+                new Price(fare.getPrice().getAmount(), fare.getPrice().getCurrency())
+        );
     }
 
     /*private fun Search.getSelectionSortedByBound() =
@@ -60,6 +85,14 @@ public class BookingInProcAdapterToSearch implements GetTrainsToBook, IsSelectio
     }*/
 
     private static  List<Pair<SpaceTrain, UUID>> getSelectionSortedByBound(Search search) {
+        /*search.getSelection().getSpaceTrainsByBound()
+                 .stream()
+                 .sorted(Comparator.comparingInt(entry -> entry.getKey().ordinal()))
+                .map( entry -> {
+                    UUID fareId  = entry.getValue().getFareId();
+                    return null;
+                })*/
+        ;
        /* return search.getSelection().getSpaceTrainsByBound().stream()
                 .sorted(Comparator.comparingInt(entry -> entry.getKey().ordinal()))
                 .map(entry -> new Pair<>(
@@ -91,26 +124,38 @@ public class BookingInProcAdapterToSearch implements GetTrainsToBook, IsSelectio
                 .collect(Collectors.toList());
     }*/
 
-    @Override
-    public boolean of(UUID searchId) {
-        Search search = getSearch.identifiedBy(searchId);
-        return search.isSelectionComplete();
+    private List<SpaceTrain> convertSelectedTrainsFrom(Selection selection) {
+        return selection.getListPairSpaceTrains().stream()
+                .map(selectedTrain -> {
+                    org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain train =
+                            selectedTrain.getFirst()
+                    ;
+                    UUID fareId = selectedTrain.getSecond();
+                    FareOption selectedFareOption = train.getFare(fareId);
+
+                    return new SpaceTrain(
+                            train.getNumber(),
+                            train.getOriginId(),
+                            train.getDestinationId(),
+                            convertToBookingSchedule(train.getSchedule()),
+                            convertToBookingFare(selectedFareOption)
+                    );
+                })
+                .collect(Collectors.toList());
     }
 
-    // com.beyondxscratch.mandaloreexpress.search.domain.spacetrain.Schedule
-    private org.manmvou.mandaloreexpress.booking.domain.spacetrain.Schedule convertToBookingSchedule(
-            org.manmvou.mandalore.express.search.domain.spacetrain.Schedule schedule
-    ) {
-        return new org.manmvou.mandaloreexpress.booking.domain.spacetrain.Schedule(
-                schedule.getDeparture(), schedule.getArrival()
-        );
+    static class Selection{
+       private  List<
+                    Pair<
+                            org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain,
+                            UUID>
+                  > listPairSpaceTrains;
+
+        public List<Pair<org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain, UUID>> getListPairSpaceTrains() {
+            return listPairSpaceTrains;
+        }
     }
 
-    private SelectedFare convertToBookingFare(FareOption fare) {
-        return new SelectedFare(
-                fare.getId(),
-                ComfortClass.valueOf(fare.getComfortClass().name()),
-                new Price(fare.getPrice().getAmount(), fare.getPrice().getCurrency())
-        );
-    }
+
+
 }
