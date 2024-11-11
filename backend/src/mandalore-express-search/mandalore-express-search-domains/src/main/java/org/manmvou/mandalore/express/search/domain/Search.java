@@ -85,11 +85,11 @@ public class Search {
     }
 
     public SpaceTrain getSpaceTrainWithNumber(String wantedNumber) {
-        /*return spaceTrains.stream()
+        return spaceTrains.getTrains().stream()
                 .filter(spaceTrain -> spaceTrain.getNumber().equals(wantedNumber))
                 .findFirst()
-                .orElseThrow();*/
-        return null;
+                .orElseThrow();
+        //return null;
     }
 
     public Search selectSpaceTrainWithFare(String spaceTrainNumber, UUID fareId, boolean resetSelection) {
