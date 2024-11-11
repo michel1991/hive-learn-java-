@@ -74,12 +74,5 @@ public class FareOption extends RepresentationModel<FareOption> {
     }
 }
 
-// Type alias for Set<FareOption>
-/*public static Set<FareOption> toResource(DomainFareOptions domainFareOptions, LinkBuilder spaceTrainLink) {
-    return domainFareOptions.stream()
-            .map(fareOption -> fareOption.toResource(spaceTrainLink))
-            .collect(Collectors.toSet());
-}*/
-
 
 
