@@ -2,51 +2,11 @@ package org.manmvou.mandalore.express.search.infrastructure.controllers;
 
 import org.manmvou.mandalore.express.hypermedia.infrastructure.hypermedia.CrossDomainHypermediaResolver;
 import org.manmvou.mandalore.express.hypermedia.infrastructure.hypermedia.Relation.CreateBooking;
-//import com.beyondxscratch.mandaloreexpress.search.domain.api.*;
-//import org.manmvou.mandalore.express.search.domain.criteria.Criteria;
-import org.manmvou.mandalore.express.hypermedia.infrastructure.Resource;
-
-
-//import com.beyondxscratch.mandaloreexpress.infrastructure.hypermedia.CrossDomainHypermediaResolver;
-import org.manmvou.mandalore.express.hypermedia.infrastructure.hypermedia.CrossDomainHypermediaResolver;
-//import com.beyondxscratch.mandaloreexpress.infrastructure.hypermedia.Relation.CreateBooking;
-import org.manmvou.mandalore.express.hypermedia.infrastructure.hypermedia.Relation.CreateBooking;
 import org.manmvou.mandalore.express.search.domain.api.*;
-//import com.beyondxscratch.mandaloreexpress.search.domain.api.*;
-//import org.manmvou.mandalore.express.search.domain.criteria.Criteria
-// import com.beyondxscratch.mandaloreexpress.search.domain.criteria.Criteria as DomainCriteria;
-//import com.beyondxscratch.mandaloreexpress.search.domain.spaceport.SpacePort;
-import org.manmvou.mandalore.express.search.domain.spaceport.SpacePort;
-//import com.beyondxscratch.mandaloreexpress.search.domain.spacetrain.Bound;
 import org.manmvou.mandalore.express.search.domain.criteria.Journey;
 import org.manmvou.mandalore.express.search.domain.spacetrain.Bound;
-//import com.beyondxscratch.mandaloreexpress.search.infrastructure.resources.FareOption;
 import org.manmvou.mandalore.express.search.infrastructure.resources.*;
-//import com.beyondxscratch.mandaloreexpress.search.infrastructure.resources.Search;
-//import com.beyondxscratch.mandaloreexpress.search.infrastructure.resources.SelectedSpaceTrain;
-//import com.beyondxscratch.mandaloreexpress.search.infrastructure.resources.Selection;
-//import com.beyondxscratch.mandaloreexpress.search.infrastructure.resources.SpaceTrain;
-//import com.beyondxscratch.mandaloreexpress.search.infrastructure.resources.SpaceTrains;
 import org.manmvou.mandalore.express.search.infrastructure.resources.SpaceTrain.SpaceTrains;
-// import com.beyondxscratch.mandaloreexpress.search.infrastructure.resources.toResource;
-//import com.beyondxscratch.mandaloreexpress.search.infrastructure.resources.Criteria;
-//import com.beyondxscratch.mandaloreexpress.search.infrastructure.resources.FareOptions
-import org.manmvou.mandalore.express.search.infrastructure.resources.FareOption.FareOptions;
-
-/*import com.beyondxscratch.mandaloreexpress.search.domain.Search as DomainSearch
-import com.beyondxscratch.mandaloreexpress.search.domain.criteria.Criteria as DomainCriteria
-import com.beyondxscratch.mandaloreexpress.search.domain.spacetrain.SpaceTrain as DomainSpaceTrain
-import com.beyondxscratch.mandaloreexpress.search.domain.spacetrain.SpaceTrains as DomainSpaceTrains
-import com.beyondxscratch.mandaloreexpress.search.domain.spacetrain.fare.FareOption as DomainFareOption
-import com.beyondxscratch.mandaloreexpress.search.domain.spacetrain.fare.FareOptions as DomainFareOptions*/
-
-//import org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain.SpaceTrains;
-
-
-
-
-//import com.beyondxscratch.mandaloreexpress.search.infrastructure.resources.*;
-//import org.manmvou.mandalore.express.search.infrastructure.resources.*;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.RepresentationModel;
@@ -58,8 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-//import com.beyondxscratch.mandaloreexpress.search.domain.Search;
-//import org.manmvou.mandalore.express.search.domain.Search;
+
 
 import java.net.URI;
 import java.time.LocalDateTime;

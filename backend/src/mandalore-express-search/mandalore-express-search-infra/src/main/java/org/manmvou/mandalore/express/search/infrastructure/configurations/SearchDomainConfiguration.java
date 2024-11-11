@@ -21,7 +21,8 @@ import org.springframework.context.annotation.FilterType;
         //basePackageClasses = Booking.class,
         basePackages = {
                 //"org.manmvou.mandaloreexpress.booking.domain",
-                "org.manmvou.mandalore.express.search.domain"
+                "org.manmvou.mandalore.express.search.domain",
+                "org.manmvou.mandalore.express.hypermedia.infrastructure.hypermedia"
                 //"org.manmvou.mandalore.express.booking.infrastructure.clients"
         },
         //includeFilters = @Filter(type = FilterType.ANNOTATION, value = {DomainService.class, Stub.class, AntiCorruptionLayer.class})
