@@ -39,8 +39,11 @@ public class Selection implements Map<Bound, SelectedSpaceTrain> {
     }
 
     public Selection selectSpaceTrainWithFare(SpaceTrain spaceTrain, UUID fareId, Price price) {
-        Map<Bound, SelectedSpaceTrain> newSelectedSpaceTrains = new java.util.HashMap<>(selectedSpaceTrainsByBound);
-        newSelectedSpaceTrains.put(spaceTrain.getBound(), new SelectedSpaceTrain(spaceTrain.getNumber(), fareId, price));
+        Map<Bound, SelectedSpaceTrain> newSelectedSpaceTrains = new HashMap<>(selectedSpaceTrainsByBound);
+        newSelectedSpaceTrains.put(
+                spaceTrain.getBound(),
+                new SelectedSpaceTrain(spaceTrain.getNumber(), fareId, price)
+        );
         return new Selection(newSelectedSpaceTrains);
     }
 
