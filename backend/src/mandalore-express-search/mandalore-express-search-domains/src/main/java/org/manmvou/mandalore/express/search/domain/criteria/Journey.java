@@ -68,5 +68,9 @@ public class Journey {
         public Journey get(int i) {
             return this.journeys.get(i);
         }
+
+        public static Journeys of(List<Journey> trains){
+            return new Journeys(trains);
+        }
     }
 }
