@@ -41,9 +41,9 @@ public class BookingInProcAdapterToSearch implements GetTrainsToBook, IsSelectio
     @Override
     public List<SpaceTrain> from(UUID searchId) {
         Search search = getSearch.identifiedBy(searchId);
+        List<Pair<org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain, UUID>> listTrainFromSearch =
         getSelectionSortedByBound(search);
-        //return convertSelectedTrainsFrom(search.getSelectionSortedByBound());
-        return new ArrayList<>();
+        return convertSelectedTrainsFrom(new Selection(listTrainFromSearch));
     }
 
     // com.beyondxscratch.mandaloreexpress.search.domain.spacetrain.Schedule
@@ -63,66 +63,19 @@ public class BookingInProcAdapterToSearch implements GetTrainsToBook, IsSelectio
         );
     }
 
-    /*private fun Search.getSelectionSortedByBound() =
-            selection.spaceTrainsByBound.sortedBy { it.key.ordinal }
-            .map {
-        Pair(
-                getSpaceTrainWithNumber(it.value.spaceTrainNumber),
-                it.value.fareId
-        )
-    }*/
-
-    /*
-        chat gpt
-       private List<Pair<SpaceTrain, UUID>> getSelectionSortedByBound(Search search) {
-        return search.getSelection().getSpaceTrainsByBound().entrySet().stream()
-                .sorted(Comparator.comparingInt(entry -> entry.getKey().ordinal()))
-                .map(entry -> new Pair<>(
-                        getSpaceTrainWithNumber(entry.getValue().getSpaceTrainNumber()),
-                        entry.getValue().getFareId()
-                ))
-                .collect(Collectors.toList());
-    }*/
-
-    private static  List<Pair<SpaceTrain, UUID>> getSelectionSortedByBound(Search search) {
-        /*search.getSelection().getSpaceTrainsByBound()
+    private static  List<Pair<org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain, UUID>> getSelectionSortedByBound(Search search) {
+        return search.getSelection().getSpaceTrainsByBound()
                  .stream()
                  .sorted(Comparator.comparingInt(entry -> entry.getKey().ordinal()))
                 .map( entry -> {
+                    var spaceTrain = search.getSpaceTrainWithNumber(entry.getValue().getSpaceTrainNumber());
                     UUID fareId  = entry.getValue().getFareId();
-                    return null;
-                })*/
+                    return new Pair<org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain, UUID>(spaceTrain, fareId);
+                }).collect(Collectors.toList())
         ;
-       /* return search.getSelection().getSpaceTrainsByBound().stream()
-                .sorted(Comparator.comparingInt(entry -> entry.getKey().ordinal()))
-                .map(entry -> new Pair<>(
-                        getSpaceTrainWithNumber(entry.getValue().getSpaceTrainNumber()),
-                        entry.getValue().getFareId()
-                ))
-                .collect(Collectors.toList());*/
-        return null;
     }
 
 
-
-
-    /*private List<SpaceTrain> convertSelectedTrainsFrom(List<Pair<SearchTrain, UUID>> selection) {
-        return selection.stream()
-                .map(selectedTrain -> {
-                    SearchTrain train = selectedTrain.getFirst();
-                    UUID fareId = selectedTrain.getSecond();
-                    FareOption selectedFareOption = train.getFare(fareId);
-
-                    return new SpaceTrain(
-                            train.getNumber(),
-                            train.getOriginId(),
-                            train.getDestinationId(),
-                            convertToBookingSchedule(train.getSchedule()),
-                            convertToBookingFare(selectedFareOption)
-                    );
-                })
-                .collect(Collectors.toList());
-    }*/
 
     private List<SpaceTrain> convertSelectedTrainsFrom(Selection selection) {
         return selection.getListPairSpaceTrains().stream()
@@ -133,6 +86,7 @@ public class BookingInProcAdapterToSearch implements GetTrainsToBook, IsSelectio
                     UUID fareId = selectedTrain.getSecond();
                     FareOption selectedFareOption = train.getFare(fareId);
 
+                    // booking BookingTrain
                     return new SpaceTrain(
                             train.getNumber(),
                             train.getOriginId(),
@@ -145,11 +99,15 @@ public class BookingInProcAdapterToSearch implements GetTrainsToBook, IsSelectio
     }
 
     static class Selection{
-       private  List<
+       private final List<
                     Pair<
                             org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain,
                             UUID>
                   > listPairSpaceTrains;
+
+        public Selection(List<Pair<org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain, UUID>> listPairSpaceTrains) {
+            this.listPairSpaceTrains = listPairSpaceTrains;
+        }
 
         public List<Pair<org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain, UUID>> getListPairSpaceTrains() {
             return listPairSpaceTrains;
