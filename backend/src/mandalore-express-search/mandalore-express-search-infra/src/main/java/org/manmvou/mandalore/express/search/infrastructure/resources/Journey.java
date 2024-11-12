@@ -5,18 +5,24 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-
+import com.fasterxml.jackson.annotation.JsonCreator;
 import org.manmvou.mandalore.express.hypermedia.infrastructure.Resource;
  //import org.manmvou.mandalore.express.search.domain.criteria.Journey;
 
 @Resource
 public class Journey {
-    private final URI departureSpacePortId;
-    private final String departureSchedule;
-    private final URI arrivalSpacePortId;
+    private  final URI departureSpacePortId;
+    private  final String departureSchedule;
+    private  final URI arrivalSpacePortId;
 
-    public Journey(URI departureSpacePortId, String departureSchedule, URI arrivalSpacePortId) {
+    @JsonCreator
+    public Journey(
+            @JsonProperty("departureSpacePortId") URI departureSpacePortId,
+            @JsonProperty("departureSchedule") String departureSchedule,
+            @JsonProperty("arrivalSpacePortId") URI arrivalSpacePortId
+    ) {
         this.departureSpacePortId = departureSpacePortId;
         this.departureSchedule = departureSchedule;
         this.arrivalSpacePortId = arrivalSpacePortId;
@@ -32,6 +38,15 @@ public class Journey {
 
     public URI getArrivalSpacePortId() {
         return arrivalSpacePortId;
+    }
+
+    @Override
+    public String toString() {
+        return "Journey{" +
+                "departureSpacePortId=" + departureSpacePortId +
+                ", departureSchedule='" + departureSchedule + '\'' +
+                ", arrivalSpacePortId=" + arrivalSpacePortId +
+                '}';
     }
 
     // Conversion from DomainJourney to Journey resource
