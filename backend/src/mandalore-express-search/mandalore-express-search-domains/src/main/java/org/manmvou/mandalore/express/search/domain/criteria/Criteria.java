@@ -37,6 +37,13 @@ public class Criteria {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "Criteria{" +
+                "journeys=" + journeys +
+                '}';
+    }
+
     private boolean areOrderedByDepartureSchedule(Journey.Journeys journeys) {
         /*for (int i = 0; i < journeys.size() - 1; i++) {
             if (journeys.get(i).getDepartureSchedule().isAfter(journeys.get(i + 1).getDepartureSchedule())) {
