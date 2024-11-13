@@ -3,7 +3,6 @@ package org.manmvou.mandalore.express.search.domain.spacetrain.fare;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.Set;
 
 public class FareOption {
     private final UUID id;
@@ -60,6 +59,8 @@ public class FareOption {
                 '}';
     }
 
+
+
     // // FareOptions type alias equivalent
     public static class FareOptions {
         private final Set<FareOption> options;
@@ -70,6 +71,10 @@ public class FareOption {
 
         public Set<FareOption> getOptions() {
             return options;
+        }
+
+        public static FareOptions ofFareOptions(Set<FareOption> options){
+            return new FareOptions(options);
         }
 
         @Override
