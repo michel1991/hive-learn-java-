@@ -34,10 +34,15 @@ public class Journey {
         return arrivalSpacePortId;
     }
 
-    /* public List<Journey> getAliasTypeJourney(){
-        List<Journey> journeys = new ArrayList<>();
-        return journeys;
-    }*/
+
+    @Override
+    public String toString() {
+        return "Journey{" +
+                "departureSpacePortId='" + departureSpacePortId + '\'' +
+                ", departureSchedule=" + departureSchedule +
+                ", arrivalSpacePortId='" + arrivalSpacePortId + '\'' +
+                '}';
+    }
 
     public static class Journeys {
         private final List<Journey> journeys;
