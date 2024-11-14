@@ -6,6 +6,7 @@ import org.manmvou.mandalore.express.search.domain.api.*;
 import org.manmvou.mandalore.express.search.domain.criteria.Journey;
 import org.manmvou.mandalore.express.search.domain.spacetrain.Bound;
 import org.manmvou.mandalore.express.search.infrastructure.resources.*;
+import org.manmvou.mandalore.express.search.infrastructure.resources.SpaceTrain;
 import org.manmvou.mandalore.express.search.infrastructure.resources.SpaceTrain.SpaceTrains;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.LinkRelation;
@@ -57,7 +58,9 @@ public class SearchController {
         try {
            // DomainCriteria domainCriteria = criteria.toDomainObject();
             //org.manmvou.mandalore.express.search.domain.criteria.Criteria domainCriteria = criteria.toDomainObject();
+            //System.out.println(" size is ******* " + criteria.getJourneys().get(0));
             org.manmvou.mandalore.express.search.domain.criteria.Criteria domainCriteria = toDomainObject(criteria);
+            //System.out.println(" domain criteria search ******* " + domainCriteria);
             //DomainSearch domainSearch = searchForSpaceTrains.satisfying(domainCriteria);
             org.manmvou.mandalore.express.search.domain.Search domainSearch = searchForSpaceTrains.satisfying(domainCriteria);
             //Search search = domainSearch.toResource();
@@ -119,6 +122,14 @@ public class SearchController {
         return searchResource;
     }
 
+    private org.manmvou.mandalore.express.search.domain.Search retrieveSearch(UUID searchId) {
+        try {
+            return getSearch.identifiedBy(searchId);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "unknown search id " + searchId);
+        }
+    }
+
     @GetMapping("/{searchId}")
     public ResponseEntity<Search> retrieveAnExistingSearch(@PathVariable UUID searchId) {
         //DomainSearch domainSearch = retrieveSearch(searchId);
@@ -128,17 +139,60 @@ public class SearchController {
     }
 
 
+    private SpaceTrain toResource(
+            org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain domainSpaceTrain,
+            LinkBuilder searchLink,
+            boolean resetSelection
+    ) {
+        return new SpaceTrain(
+                domainSpaceTrain.getNumber(),
+                domainSpaceTrain.getBound(),
+                domainSpaceTrain.getOriginId(),
+                domainSpaceTrain.getDestinationId(),
+                domainSpaceTrain.getSchedule().getDeparture(),
+                domainSpaceTrain.getSchedule().getArrival(),
+                domainSpaceTrain.getSchedule().getDuration(),
+                null // todo put
+                //domainSpaceTrain.getFareOptions().toResource(searchLink.slash("spacetrains").slash(domainSpaceTrain.getNumber()), resetSelection)
+        );
+    }
+
+    private List<SpaceTrain> toResource(
+            List<org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain> domainSpaceTrains,
+            LinkBuilder searchLink,
+            boolean resetSelection) {
+        return domainSpaceTrains.stream()
+                .map(spaceTrain -> toResource(spaceTrain, searchLink, resetSelection))
+                .collect(Collectors.toList());
+    }
 
     @GetMapping("/{searchId}/spacetrains")
     public ResponseEntity<SpaceTrains> retrieveSpaceTrainsForBound(@PathVariable UUID searchId,
                                                                    @RequestParam Bound bound,
                                                                    @RequestParam(defaultValue = "false") boolean onlySelectable) {
-        /*org.manmvou.mandalore.express.search.domain.Search domainSearch = retrieveSearch(searchId);
+        org.manmvou.mandalore.express.search.domain.Search domainSearch = retrieveSearch(searchId);
         LinkBuilder searchLink = searchLink(searchId);
        // DomainSpaceTrains spaceTrains = onlySelectable ? domainSearch.selectableSpaceTrains(bound) : domainSearch.spaceTrains(bound);
-        org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain.SpaceTrains spaceTrains = onlySelectable ? domainSearch.selectableSpaceTrains(bound) : domainSearch.spaceTrains(bound);
+        var value = onlySelectable ? domainSearch.selectableSpaceTrains(bound) : domainSearch.fromBound(bound);
+        System.out.println("******** value to fin ********* "+ value);
+        //List<SpaceTrain> resourceSpaceTrainsX = toResource(value, searchLink, onlySelectable);
+        SpaceTrains spaceTrains  = new SpaceTrains(toResource(value, searchLink, onlySelectable));
+        spaceTrains.add(searchLink.withRel("search"));
+        spaceTrains.add(searchLink.slash("selection").withRel("selection"));
+
+        linkToSpaceTrainsForBound(
+                spaceTrains,
+                searchId,
+                bound,
+                LinkRelation.of(IanaLinkRelations.SELF.value()),
+                onlySelectable
+        );
+        return ResponseEntity.ok(spaceTrains);
+
+        // org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain.SpaceTrains spaceTrains = onlySelectable ? domainSearch.selectableSpaceTrains(bound) : domainSearch.spaceTrains(bound);
         //SpaceTrains resourceSpaceTrains = new SpaceTrains(spaceTrains.toResource(searchLink, !onlySelectable));
-        SpaceTrains resourceSpaceTrains = new SpaceTrains(spaceTrains.toResource(searchLink, !onlySelectable));
+        /*SpaceTrains resourceSpaceTrains = new SpaceTrains(spaceTrains.toResource(searchLink, !onlySelectable));
+
 
         resourceSpaceTrains.add(searchLink.withRel("search"))
                 .add(searchLink.slash("selection").withRel("selection"))
@@ -149,7 +203,8 @@ public class SearchController {
                         onlySelectable
                 );
         return ResponseEntity.ok(resourceSpaceTrains);*/
-        return ResponseEntity.ok(null);
+        //throw new ResponseStatusException(HttpStatus.BAD_REQUEST," Error found search");
+        //return ResponseEntity.ok(null);
     }
 
     @PostMapping("/{searchId}/spacetrains/{spaceTrainNumber}/fareoptions/{fareId}/select")
@@ -259,14 +314,6 @@ public class SearchController {
             boolean onlySelectable) {
         return resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SearchController.class)
                 .retrieveSpaceTrainsForBound(searchId, bound, onlySelectable)).withRel(linkRelation));
-    }
-
-    private org.manmvou.mandalore.express.search.domain.Search retrieveSearch(UUID searchId) {
-        try {
-            return getSearch.identifiedBy(searchId);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "unknown search id " + searchId);
-        }
     }
 
 
