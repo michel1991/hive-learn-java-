@@ -102,11 +102,6 @@ public class SpaceTrain {
                 '}';
     }
 
-    public static List<SpaceTrain> filterByBound(List<SpaceTrain> spaceTrains, Bound bound) {
-        return spaceTrains.stream()
-                .filter(spaceTrain -> spaceTrain.getBound() == bound)
-                .collect(Collectors.toList());
-    }
 
     // SpaceTrains type alias equivalent
 
@@ -121,7 +116,13 @@ public class SpaceTrain {
             return trains;
         }
 
-        @Override
+        public static List<SpaceTrain> get(List<SpaceTrain> spaceTrains, Bound bound) {
+            return spaceTrains.stream()
+                    .filter(spaceTrain -> spaceTrain.getBound() == bound)
+                    .collect(Collectors.toList());
+        }
+
+            @Override
         public String toString() {
             return "SpaceTrains{" +
                     "trains=" + trains +
