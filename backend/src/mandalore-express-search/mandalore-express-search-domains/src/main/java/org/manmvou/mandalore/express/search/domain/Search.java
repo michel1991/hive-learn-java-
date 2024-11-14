@@ -16,9 +16,11 @@ import org.manmvou.mandalore.express.search.domain.spacetrain.Bound;
 //import org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrains;
 import org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain.SpaceTrains;
 import org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain;
+import static org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain.SpaceTrains.get;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Search {
     private final UUID id;
@@ -38,6 +40,11 @@ public class Search {
 
     public void setSelection(Selection selection) {
         this.selection = selection;
+    }
+
+    public List<SpaceTrain> fromBound(Bound bound){
+        //this.spaceTrains.get()
+        return SpaceTrain.SpaceTrains.get(spaceTrains.getTrains(), bound);
     }
 
     private void validate() {
@@ -89,7 +96,6 @@ public class Search {
                 .filter(spaceTrain -> spaceTrain.getNumber().equals(wantedNumber))
                 .findFirst()
                 .orElseThrow();
-        //return null;
     }
 
     public Search selectSpaceTrainWithFare(String spaceTrainNumber, UUID fareId, boolean resetSelection) {
@@ -111,16 +117,20 @@ public class Search {
     }
 
     public List<SpaceTrain> selectableSpaceTrains(Bound bound) {
-       /* if (selection.isEmpty()) {
-            return spaceTrains.get(bound);
+        if (selection.isEmpty()) {
+            return get(spaceTrains.getTrains(), bound);
         } else {
-            return selection.getSpaceTrainsByBound().entrySet().stream()
+            return selection.getSpaceTrainsByBound().stream()
                     .filter(entry -> entry.getKey() != bound)
-                    .flatMap(entry -> getSpaceTrainWithNumber(entry.getValue().getSpaceTrainNumber()).getCompatibleSpaceTrains().stream())
+                    .flatMap(
+                            entry -> getSpaceTrainWithNumber(
+                            entry.getValue().getSpaceTrainNumber()
+                           )
+                            .getCompatibleSpaceTrains().stream()
+                    ).map(this::getSpaceTrainWithNumber)
                     .filter(spaceTrain -> spaceTrain.getBound() == bound)
                     .collect(Collectors.toList());
-        }*/
-        return null;
+        }
     }
 
     private boolean spaceTrainsHaveCompatibilitiesWhenRoundTrip() {
@@ -171,28 +181,27 @@ public class Search {
         return true;
     }
 
-    private boolean correspondsToTheBoundsOf(SpaceTrains spaceTrainsFromSearch) {
-       /* return selection.getSpaceTrains().stream().allMatch(spaceTrain ->
-                spaceTrainsFromSearch.stream()
+    /*private boolean correspondsToTheBoundsOf(SpaceTrains spaceTrainsFromSearch) {
+       return selection.getSpaceTrains().stream().allMatch(spaceTrain ->
+                spaceTrainsFromSearch.getTrains().stream()
                         .filter(spaceTrainFromSearch -> spaceTrainFromSearch.getNumber().equals(spaceTrain.getSpaceTrainNumber()))
                         .anyMatch(spaceTrainFromSearch -> spaceTrainFromSearch.getBound() == spaceTrain.getBound())
-        );*/
+        );
         return true;
-    }
+    }*/
 
     private boolean areAllSatisfiedBySpaceTrain(List<Bound> bounds) {
-       // return spaceTrains.isEmpty() || spaceTrains.stream().map(SpaceTrain::getBound).collect(Collectors.toList()).containsAll(bounds);
+       //return spaceTrains.getTrains().isEmpty() || spaceTrains.stream().map(SpaceTrain::getBound).collect(Collectors.toList()).containsAll(bounds);
         return true;
     }
 
     private boolean correspondTo(Journey.Journeys journeys) {
-        /*return spaceTrains.stream().allMatch(spaceTrain ->
+        return spaceTrains.getTrains().stream().allMatch(spaceTrain ->
                 journeys.getJourneys().stream().anyMatch(journey ->
                         journey.getDepartureSpacePortId().equals(spaceTrain.getOriginId()) &&
                                 journey.getArrivalSpacePortId().equals(spaceTrain.getDestinationId())
                 )
-        );*/
-        return true;
+        );
     }
 
     @Override
