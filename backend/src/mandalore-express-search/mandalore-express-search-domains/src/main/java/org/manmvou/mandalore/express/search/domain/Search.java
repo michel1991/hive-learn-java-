@@ -1,21 +1,14 @@
 package org.manmvou.mandalore.express.search.domain;
 
-
-
-
-//import com.beyondxscratch.mandaloreexpress.search.domain.criteria.Journeys;
-//ok import com.beyondxscratch.mandaloreexpress.search.domain.selection.Selection;
-//ok import com.beyondxscratch.mandaloreexpress.search.domain.spacetrain.Bound;
-//ok import com.beyondxscratch.mandaloreexpress.search.domain.spacetrain.SpaceTrain;
-//import com.beyondxscratch.mandaloreexpress.search.domain.spacetrain.SpaceTrains;
 import org.manmvou.mandalore.express.search.domain.criteria.Criteria;
 import org.manmvou.mandalore.express.search.domain.criteria.Journey;
+import org.manmvou.mandalore.express.search.domain.selection.SelectedSpaceTrain;
 import org.manmvou.mandalore.express.search.domain.selection.Selection;
-//import org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrains;
 import org.manmvou.mandalore.express.search.domain.spacetrain.Bound;
-//import org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrains;
 import org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain.SpaceTrains;
 import org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain;
+import org.manmvou.mandalore.express.search.domain.spacetrain.fare.Price;
+
 import static org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain.SpaceTrains.get;
 
 import java.util.List;
@@ -28,12 +21,12 @@ public class Search {
     private final SpaceTrains spaceTrains;
     private Selection selection;
 
-    public Search(Criteria criteria, SpaceTrains spaceTrains) {
+    public Search(Criteria criteria, SpaceTrains spaceTrains, Selection selection) {
         this.id = UUID.randomUUID();
         this.criteria = criteria;
         this.spaceTrains = spaceTrains;
-        //this.selection = selection != null ? selection : new Selection();
-        this.selection = new Selection();
+        this.selection = selection != null ? selection : new Selection();
+        //this.selection = new Selection();
 
         validate();
     }
@@ -42,15 +35,30 @@ public class Search {
         this.selection = selection;
     }
 
-    public List<SpaceTrain> fromBound(Bound bound){
+    public List<SpaceTrain> fromBound(Bound bound) {
         //this.spaceTrains.get()
         return SpaceTrain.SpaceTrains.get(spaceTrains.getTrains(), bound);
     }
 
+    public List<Bound> getBounds(Journey.Journeys journeys) {
+        return java.util.Arrays.stream(Bound.values(), 0, journeys.size())
+                .collect(Collectors.toList());
+    }
+
+    private boolean areAllBoundsSatisfiedBySpaceTrains(List<Bound> bounds, SpaceTrains spaceTrains) {
+        return spaceTrains.getTrains().stream()
+                .map(SpaceTrain::getBound)
+                .collect(Collectors.toSet())
+                .containsAll(bounds);
+    }
+
+
     private void validate() {
         Journey.Journeys journeys = criteria.getJourneys();
+        areAllBoundsSatisfiedBySpaceTrains(getBounds(journeys), spaceTrains);
 
-        /*if (!areAllSatisfiedBySpaceTrain(journeys.getBounds())) {
+        //if (!areAllSatisfiedBySpaceTrain(journeys.getBounds())) {
+        if (!areAllBoundsSatisfiedBySpaceTrains(getBounds(journeys), spaceTrains)) {
             throw new IllegalArgumentException("Some journeys don't have at least one corresponding space train");
         }
 
@@ -88,7 +96,7 @@ public class Search {
 
         if (!haveSymmetricCompatibilities()) {
             throw new IllegalArgumentException("Some SpaceTrains don't respect a symmetric compatibility");
-        }*/
+        }
     }
 
     public SpaceTrain getSpaceTrainWithNumber(String wantedNumber) {
@@ -99,17 +107,20 @@ public class Search {
     }
 
     public Search selectSpaceTrainWithFare(String spaceTrainNumber, UUID fareId, boolean resetSelection) {
-        /*SpaceTrain spaceTrainToSelect = getSpaceTrainWithNumber(spaceTrainNumber);
+        SpaceTrain spaceTrainToSelect = getSpaceTrainWithNumber(spaceTrainNumber);
         Selection newSelection = getExistingSelectionOrReset(resetSelection, spaceTrainToSelect);
-        double price = spaceTrainToSelect.getFareOptions().stream()
-                .filter(fareOption -> fareOption.getId().equals(fareId))
-                .findFirst()
-                .orElseThrow()
-                .getPrice();
-        return new Search(criteria,
+        Price price = spaceTrainToSelect
+                    .getFareOptions()
+                    .getOptions().stream()
+                    .filter(fareOption -> fareOption.getId().equals(fareId))
+                    .findFirst()
+                    .orElseThrow()
+                     .getPrice();
+        return new Search(
+                criteria,
                 spaceTrains,
-                newSelection.selectSpaceTrainWithFare(spaceTrainToSelect, fareId, price));*/
-        return null;
+                newSelection.selectSpaceTrainWithFare(spaceTrainToSelect, fareId, price)
+        );
     }
 
     public boolean isSelectionComplete() {
@@ -124,9 +135,9 @@ public class Search {
                     .filter(entry -> entry.getKey() != bound)
                     .flatMap(
                             entry -> getSpaceTrainWithNumber(
-                            entry.getValue().getSpaceTrainNumber()
-                           )
-                            .getCompatibleSpaceTrains().stream()
+                                    entry.getValue().getSpaceTrainNumber()
+                            )
+                                    .getCompatibleSpaceTrains().stream()
                     ).map(this::getSpaceTrainWithNumber)
                     .filter(spaceTrain -> spaceTrain.getBound() == bound)
                     .collect(Collectors.toList());
@@ -134,66 +145,108 @@ public class Search {
     }
 
     private boolean spaceTrainsHaveCompatibilitiesWhenRoundTrip() {
-        /*if (!criteria.isOneWay()) {
-            return spaceTrains.stream().allMatch(spaceTrain -> !spaceTrain.getCompatibleSpaceTrains().isEmpty());
+        if (!criteria.isOneWay()) {
+            return spaceTrains
+                    .getTrains()
+                    .stream().allMatch(
+                            spaceTrain -> !spaceTrain.getCompatibleSpaceTrains().isEmpty())
+                    ;
         }
-        return true;*/
         return true;
     }
 
     private boolean spaceTrainsDontHaveCompatibilitiesWhenOneWay() {
-        /*if (criteria.isOneWay()) {
-            return spaceTrains.stream().allMatch(spaceTrain -> spaceTrain.getCompatibleSpaceTrains().isEmpty());
+        if (criteria.isOneWay()) {
+            return spaceTrains
+                      .getTrains()
+                      .stream()
+                       .allMatch(
+                                spaceTrain -> spaceTrain.getCompatibleSpaceTrains().isEmpty()
+                       );
         }
-        return true;*/
         return true;
     }
 
+    private boolean isCompatibleWithSelection(SpaceTrain spaceTrainToSelect) {
+        List<Bound> alreadySelectedBounds = selection.getBounds().stream()
+                .filter(bound -> bound != spaceTrainToSelect.getBound())
+                .collect(Collectors.toList());
+
+        return alreadySelectedBounds.stream()
+                .map(bound -> selection.getSelectedSpaceTrain(bound))
+                .allMatch(selectedSpaceTrain -> {
+                    if (selectedSpaceTrain == null) return true;
+                    return spaceTrains.getTrains().stream()
+                            .filter(st -> st.getNumber().equals(selectedSpaceTrain.getSpaceTrainNumber()))
+                            .findFirst()
+                            .map(st -> st.getCompatibleSpaceTrains().contains(spaceTrainToSelect.getNumber()))
+                            .orElse(false);
+                });
+    }
+
+
     private Selection getExistingSelectionOrReset(boolean resetSelection, SpaceTrain spaceTrainToSelect) {
-        /*if (resetSelection) {
+        if (resetSelection) {
             return new Selection();
         } else {
-            if (!spaceTrainToSelect.isCompatibleWithSelection(selection)) {
+            //if (!spaceTrainToSelect.isCompatibleWithSelection(selection)) {
+            if (!this.isCompatibleWithSelection(spaceTrainToSelect)) {
                 throw new IllegalArgumentException("Cannot select incompatible space trains");
             }
             return selection;
-        }*/
-        return null;
+        }
     }
 
     private boolean selectionExistsIn(SpaceTrains spaceTrainsFromSearch) {
-        /*return spaceTrainsFromSearch
+        return spaceTrainsFromSearch
+                .getTrains()
                 .stream().map(SpaceTrain::getNumber)
                 .collect(Collectors.toList())
-                .containsAll(selection.getSpaceTrains().stream().map(Selection::getSpaceTrainNumber)
-                        .collect(Collectors.toList()));*/
+                .containsAll(
+                        selection
+                                .getSpaceTrains()
+                                .stream()
+                                .map(SelectedSpaceTrain::getSpaceTrainNumber)
+                                //.map(Selection::getSpaceTrainNumber)
+                                .collect(Collectors.toList())
+                );
 
-        return true;
     }
 
     private boolean withOnlyKnownFaresFrom(SpaceTrains spaceTrainsFromSearch) {
-        /*return selection.getSpaceTrains().stream().allMatch(selectedSpaceTrain ->
-                spaceTrainsFromSearch.stream()
-                        .filter(spaceTrain -> spaceTrain.getNumber().equals(selectedSpaceTrain.getSpaceTrainNumber()))
-                        .anyMatch(spaceTrain -> spaceTrain.getFareOptions().stream().anyMatch(fareOption -> fareOption.getId().equals(selectedSpaceTrain.getFareId()))
-                        )
-        );*/
-        return true;
-    }
-
-    /*private boolean correspondsToTheBoundsOf(SpaceTrains spaceTrainsFromSearch) {
-       return selection.getSpaceTrains().stream().allMatch(spaceTrain ->
+        return selection.getSpaceTrains().stream().allMatch(selectedSpaceTrain ->
                 spaceTrainsFromSearch.getTrains().stream()
-                        .filter(spaceTrainFromSearch -> spaceTrainFromSearch.getNumber().equals(spaceTrain.getSpaceTrainNumber()))
-                        .anyMatch(spaceTrainFromSearch -> spaceTrainFromSearch.getBound() == spaceTrain.getBound())
+                        .filter(spaceTrain -> spaceTrain.getNumber().equals(selectedSpaceTrain.getSpaceTrainNumber()))
+                        .anyMatch(
+                                spaceTrain ->
+                                        spaceTrain
+                                                .getFareOptions()
+                                                .getOptions()
+                                                .stream()
+                                                .anyMatch(
+                                                        fareOption -> fareOption.getId().equals(selectedSpaceTrain.getFareId())
+                                                )
+                        )
         );
-        return true;
-    }*/
+    }
 
-    private boolean areAllSatisfiedBySpaceTrain(List<Bound> bounds) {
-       //return spaceTrains.getTrains().isEmpty() || spaceTrains.stream().map(SpaceTrain::getBound).collect(Collectors.toList()).containsAll(bounds);
+
+    private boolean correspondsToTheBoundsOf(SpaceTrains spaceTrainsFromSearch) {
+       /*return selection.getSpaceTrains()
+                       .stream()
+                        .allMatch(
+                               spaceTrain ->
+                                       spaceTrainsFromSearch.getTrains()
+                                               .stream()
+                                                .filter(
+                                                        spaceTrainFromSearch ->
+                                                                spaceTrainFromSearch.getNumber()
+                                                                .equals(spaceTrain.getSpaceTrainNumber())
+                                                ).anyMatch(spaceTrainFromSearch -> spaceTrainFromSearch.getBound() == spaceTrain.getBound())
+                        );*/
         return true;
     }
+
 
     private boolean correspondTo(Journey.Journeys journeys) {
         return spaceTrains.getTrains().stream().allMatch(spaceTrain ->
@@ -218,16 +271,32 @@ public class Search {
     }
 
     private boolean haveSymmetricCompatibilities() {
-        /*return spaceTrains.stream().allMatch(spaceTrain ->
-                spaceTrain.getCompatibleSpaceTrains().stream().allMatch(compatibleNumber ->
-                        spaceTrains.stream().filter(st -> st.getNumber().equals(compatibleNumber)).findFirst().orElseThrow().getCompatibleSpaceTrains().contains(spaceTrain.getNumber())
-                )
-        );*/
-        return true;
+        return spaceTrains
+                .getTrains()
+                .stream()
+                .allMatch(spaceTrain ->
+                    spaceTrain
+                            .getCompatibleSpaceTrains()
+                            .stream()
+                            .allMatch(compatibleNumber ->
+                                spaceTrains
+                                        .getTrains()
+                                        .stream()
+                                        .filter(
+                                                st -> st.getNumber().equals(compatibleNumber)
+                                        )
+                                        .findFirst()
+                                        .orElseThrow()
+                                        .getCompatibleSpaceTrains()
+                                        .contains(spaceTrain.getNumber())
+                            )
+                );
     }
 
     private boolean areCompatibleWithKnownOnes() {
-        /*var spaceTrainByBound = spaceTrains.stream().collect(Collectors.groupingBy(SpaceTrain::getBound));
+        var spaceTrainByBound = spaceTrains.getTrains()
+                .stream()
+                .collect(Collectors.groupingBy(SpaceTrain::getBound));
 
         List<SpaceTrain> outboundSpaceTrains = spaceTrainByBound.get(Bound.OUTBOUND);
         if (outboundSpaceTrains == null) return true;
@@ -243,24 +312,47 @@ public class Search {
                 .flatMap(spaceTrain -> spaceTrain.getCompatibleSpaceTrains().stream())
                 .collect(Collectors.toList());
 
-        return outboundSpaceTrainCompatibilities.stream().allMatch(outboundCompatibility ->
-                inboundSpaceTrains.stream().anyMatch(inboundSpaceTrain -> outboundCompatibility.equals(inboundSpaceTrain.getNumber())
-                )) && inboundSpaceTrainCompatibilities.stream().allMatch(inboundCompatibility ->
-                outboundSpaceTrains.stream().anyMatch(outboundSpaceTrain -> inboundCompatibility.equals(outboundSpaceTrain.getNumber())
-                ));*/
-        return true;
+        return outboundSpaceTrainCompatibilities
+                .stream()
+                .allMatch(
+                        outboundCompatibility ->
+                                inboundSpaceTrains
+                                        .stream()
+                                        .anyMatch(
+                                                inboundSpaceTrain -> outboundCompatibility.equals(inboundSpaceTrain.getNumber()
+                                                )
+                                        )) &&
+                inboundSpaceTrainCompatibilities
+                        .stream()
+                        .allMatch(inboundCompatibility ->
+                                outboundSpaceTrains
+                                        .stream()
+                                        .anyMatch(
+                                                outboundSpaceTrain ->
+                                                        inboundCompatibility.equals(outboundSpaceTrain.getNumber())
+                                        )
+                        )
+                ;
     }
 
     private boolean areNotCompatibleWithOtherSpaceTrainOnTheSameBound() {
-        /*return spaceTrains.stream().collect(Collectors.groupingBy(SpaceTrain::getBound)).values().stream()
+        return spaceTrains
+                .getTrains()
+                .stream()
+                .collect(Collectors.groupingBy(SpaceTrain::getBound))
+                .values()
+                .stream()
                 .allMatch(spaceTrainsOnTheSameBound ->
-                        spaceTrainsOnTheSameBound.stream()
+                        spaceTrainsOnTheSameBound
+                                .stream()
                                 .flatMap(spaceTrain -> spaceTrain.getCompatibleSpaceTrains().stream())
                                 .noneMatch(aCompatibleSpaceTrainNumber ->
-                                        spaceTrainsOnTheSameBound.stream().anyMatch(spaceTrain -> spaceTrain.getNumber().equals(aCompatibleSpaceTrainNumber))
+                                        spaceTrainsOnTheSameBound.stream()
+                                                .anyMatch(spaceTrain -> spaceTrain.getNumber().equals(
+                                                        aCompatibleSpaceTrainNumber)
+                                                )
                                 )
-                );*/
-        return true;
+                );
     }
 
     public UUID getId() {

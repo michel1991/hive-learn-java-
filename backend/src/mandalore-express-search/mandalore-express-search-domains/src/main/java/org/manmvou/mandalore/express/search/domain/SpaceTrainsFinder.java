@@ -212,7 +212,7 @@ public class SpaceTrainsFinder implements RetrieveSpacePorts, SearchForSpaceTrai
         }
 
         SpaceTrains spaceTrains = findMatchingSpaceTrainsFor(journeys);
-        return searches.save(new Search(criteria, spaceTrains));
+        return searches.save(new Search(criteria, spaceTrains, null));
     }
 
 
