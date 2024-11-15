@@ -56,11 +56,15 @@ public class FareOption extends RepresentationModel<FareOption> {
         return fareOption;
     }
 
-    public static class FareOptions{
-        Set<FareOption> fareOptions;
+    public static class FareOptions extends RepresentationModel<FareOptions>{
+        private final Set<FareOption> fareOptions;
 
         public FareOptions(Set<FareOption> fareOptions) {
             this.fareOptions = fareOptions;
+        }
+
+        public Set<FareOption> getFareOptions() {
+            return fareOptions;
         }
 
         public static Set<FareOption> toResource(
@@ -68,10 +72,12 @@ public class FareOption extends RepresentationModel<FareOption> {
                 LinkBuilder spaceTrainLink) {
             return domainFareOptions.getOptions().stream()
                     //.map(fareOption -> fareOption.toResource(spaceTrainLink))
-                    .map(fareOption -> FareOption.toResource(fareOption, null))
+                    .map(fareOption -> FareOption.toResource(fareOption, spaceTrainLink))
                     .collect(Collectors.toSet());
         }
     }
+
+
 }
 
 

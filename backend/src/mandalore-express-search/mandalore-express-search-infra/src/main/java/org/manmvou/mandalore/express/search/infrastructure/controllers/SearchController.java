@@ -165,7 +165,8 @@ public class SearchController {
                 domainSpaceTrain.getSchedule().getDeparture(),
                 domainSpaceTrain.getSchedule().getArrival(),
                 domainSpaceTrain.getSchedule().getDuration(),
-                null //todo: to understand and fix this fareOptions
+                fareOptions
+                //null //todo: to understand and fix this fareOptions
         );
     }
 
@@ -192,6 +193,10 @@ public class SearchController {
                         searchId,
                         resetSelection
                 );
+        Selection selection = selectSpaceTrain.havingTheNumber(spaceTrainNumber)
+                     .withTheFare(fareId)
+                     .inSearch(searchId)
+                      .byResettingTheSelection(resetSelection);
         //Selection selection = domainSearch.toSelectionResource();
         Selection selection = this.toSelectionResource(domainSearch);
         return ResponseEntity.ok(selection);*/

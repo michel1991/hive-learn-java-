@@ -7,6 +7,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 import java.util.List;
+import java.util.Set;
 
 @Resource
 public class SpaceTrain extends RepresentationModel<SpaceTrain> {
@@ -46,7 +47,7 @@ public class SpaceTrain extends RepresentationModel<SpaceTrain> {
     public LocalDateTime getDepartureSchedule() { return departureSchedule; }
     public LocalDateTime getArrivalSchedule() { return arrivalSchedule; }
     public Duration getDuration() { return duration; }
-    public FareOption.FareOptions getFareOptions() { return fareOptions; }
+    public Set<FareOption> getFareOptions() { return fareOptions.getFareOptions(); }
 
     @Resource
     public static  class SpaceTrains extends RepresentationModel<SpaceTrains> {
