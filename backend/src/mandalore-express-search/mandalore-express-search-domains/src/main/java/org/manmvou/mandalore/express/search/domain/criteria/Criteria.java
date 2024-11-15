@@ -45,24 +45,30 @@ public class Criteria {
     }
 
     private boolean areOrderedByDepartureSchedule(Journey.Journeys journeys) {
-        /*for (int i = 0; i < journeys.size() - 1; i++) {
+        for (int i = 0; i < journeys.size() - 1; i++) {
             if (journeys.get(i).getDepartureSchedule().isAfter(journeys.get(i + 1).getDepartureSchedule())) {
                 return false;
             }
-        }*/
-        return true;
-    }
-
-    private boolean haveAtLeastADayBetweenEach(Journey.Journeys journeys) {
-        /*for (int i = 0; i < journeys.size() - 1; i++) {
-            if (!isAtLeast5DaysAfter(journeys.get(i + 1).getDepartureSchedule(), journeys.get(i).getDepartureSchedule())) {
-                return false;
-            }
-        }*/
+        }
         return true;
     }
 
     private boolean isAtLeast5DaysAfter(LocalDateTime departureOfNextJourney, LocalDateTime departureOfPreviousJourney) {
         return !departureOfNextJourney.isBefore(departureOfPreviousJourney.plusDays(5));
     }
+
+    private boolean haveAtLeastADayBetweenEach(Journey.Journeys journeys) {
+        for (int i = 0; i < journeys.size() - 1; i++) {
+            if (!isAtLeast5DaysAfter(journeys.get(i + 1).getDepartureSchedule(), journeys.get(i).getDepartureSchedule())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isOneWay(){
+        return this.journeys.getJourneys().size()  == 1;
+    }
+
+
 }
