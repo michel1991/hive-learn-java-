@@ -110,4 +110,8 @@ public class Selection implements Map<Bound, SelectedSpaceTrain> {
     public Set<Entry<Bound, SelectedSpaceTrain>> entrySet() {
         return selectedSpaceTrainsByBound.entrySet();
     }
+
+    public SelectedSpaceTrain getSelectedSpaceTrain(Bound bound) {
+        return this.get(bound);
+    }
 }
