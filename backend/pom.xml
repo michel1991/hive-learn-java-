@@ -34,40 +34,10 @@
 
   <build>
     <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-    <!--<sourceDirectory>${project.basedir}/src</sourceDirectory>-->
-    <!--<testSourceDirectory>${project.basedir}/src/test</testSourceDirectory>-->
     <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
-
-    <plugins>
-      <!-- Enforcer Plugin for Dependency Management -->
-      <plugin>
-        <artifactId>maven-enforcer-plugin</artifactId>
-      </plugin>
-    </plugins>
 
     <pluginManagement>
       <plugins>
-        <!--<plugin>
-          <artifactId>maven-enforcer-plugin</artifactId>
-          <version>3.5.0</version>
-          <executions>
-            <execution>
-              <id>dependencies-sanitization</id>
-              <goals>
-                <goal>enforce</goal>
-              </goals>
-              <configuration>
-                <rules>
-                  <dependencyConvergence/>
-                  <requireUpperBoundDeps/>
-                  <requirePluginVersions/>
-                </rules>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>-->
-
-        <!-- Dependency Plugin -->
         <plugin>
           <artifactId>maven-dependency-plugin</artifactId>
           <version>3.7.0</version>
@@ -76,10 +46,13 @@
         <!-- Surefire Plugin for Unit Testing -->
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.3.0</version>
+          <!--<version>3.3.0</version>-->
+          <version>3.0.0-M5</version>
           <configuration>
             <includes>
-              <include>**/*Should</include>
+              <include>**/*Should.java</include>
+              <include>**/*Test.java</include>
+
             </includes>
             <!--<argLine>
               -Djunit.jupiter.extensions.autodetection.enabled=true
@@ -146,14 +119,12 @@
   </build>
 
   <dependencies>
-    <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <version>3.26.3</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
