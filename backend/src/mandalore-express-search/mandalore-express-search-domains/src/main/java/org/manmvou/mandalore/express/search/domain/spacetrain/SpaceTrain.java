@@ -17,7 +17,14 @@ public class SpaceTrain {
     private final FareOption.FareOptions fareOptions;
     private final Set<String> compatibleSpaceTrains;
 
-    public SpaceTrain(String number, Bound bound, String originId, String destinationId, Schedule schedule, FareOption.FareOptions fareOptions, Set<String> compatibleSpaceTrains) {
+    public SpaceTrain(String number,
+                      Bound bound,
+                      String originId,
+                      String destinationId,
+                      Schedule schedule,
+                      FareOption.FareOptions fareOptions,
+                      Set<String> compatibleSpaceTrains
+    ) {
         this.number = number;
         this.bound = bound;
         this.originId = originId;
