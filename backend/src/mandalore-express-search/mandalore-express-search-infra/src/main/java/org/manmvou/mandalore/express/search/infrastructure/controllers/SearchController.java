@@ -347,23 +347,6 @@ public class SearchController {
                 onlySelectable
         );
         return ResponseEntity.ok(spaceTrains);
-
-        // org.manmvou.mandalore.express.search.domain.spacetrain.SpaceTrain.SpaceTrains spaceTrains = onlySelectable ? domainSearch.selectableSpaceTrains(bound) : domainSearch.spaceTrains(bound);
-        //SpaceTrains resourceSpaceTrains = new SpaceTrains(spaceTrains.toResource(searchLink, !onlySelectable));
-        /*SpaceTrains resourceSpaceTrains = new SpaceTrains(spaceTrains.toResource(searchLink, !onlySelectable));
-
-
-        resourceSpaceTrains.add(searchLink.withRel("search"))
-                .add(searchLink.slash("selection").withRel("selection"))
-                .linkToSpaceTrainsForBound(
-                        searchId,
-                        bound,
-                        LinkRelation.of(IanaLinkRelations.SELF.value()),
-                        onlySelectable
-                );
-        return ResponseEntity.ok(resourceSpaceTrains);*/
-        //throw new ResponseStatusException(HttpStatus.BAD_REQUEST," Error found search");
-        //return ResponseEntity.ok(null);
     }
 
 }
